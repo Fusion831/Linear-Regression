@@ -143,7 +143,7 @@ class Linear_Regression:
         gradient = (1 / m) * (X_b.T @ errors)
         
         if self.lambda_val > 0:
-            l2_grad=(self.lambda_val/2*m)*theta
+            l2_grad=(self.lambda_val/m)*theta
             l2_grad[0]=0
             gradient= gradient + l2_grad
             
