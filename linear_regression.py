@@ -7,6 +7,7 @@ def generate_synthetic_data(n_samples=100, true_theta0=4, true_theta1=3, noise_s
     """
     Generates simple synthetic data for linear regression.
     y = theta0 + theta1*X + noise
+    Produces only 1 feature data.
 
     Args:
         n_samples (int): Number of data points.
@@ -40,6 +41,7 @@ def generate_synthetic_data(n_samples=100, true_theta0=4, true_theta1=3, noise_s
 class Linear_Regression:
     """
     Linear Regression model implemented from scratch.
+    Included L2 Regularization
     Supports
     -Normal Equation
     -Batch Gradient Descent
@@ -272,7 +274,7 @@ class Linear_Regression:
             # Initialize theta with zeros. X_b.shape[1] is num_features + 1 (for intercept).
             self.theta = np.zeros((X_b.shape[1], 1))
         else:
-            self.theta = np.copy(theta_initial) # Ensure it's a copy
+            self.theta = np.copy(theta_initial)
 
         m_samples = len(y) # Total number of training examples
 

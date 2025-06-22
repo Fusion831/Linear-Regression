@@ -7,7 +7,7 @@ except ImportError:
     print("Error: 'linear_regression_model.py' not found or incomplete.")
     exit()
 
-def run_mvp_showcase():
+def run_mvp_showcase_linear_regression():
     N_SAMPLES = 100
     TRUE_THETA0 = 4
     TRUE_THETA1 = 3
@@ -94,4 +94,4 @@ def run_mvp_showcase():
 
 
 if __name__ == "__main__":
-    run_mvp_showcase()
+    run_mvp_showcase_linear_regression()
