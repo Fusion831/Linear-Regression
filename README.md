@@ -99,11 +99,9 @@ python -m venv venv
 # Install dependencies from requirements.txt
 pip install -r requirements.txt
 
-Running the Example
 
 Clone the repository:
 
-Generated bash
 git clone http://github.com/Fusion831/Linear-Regression
 cd Linear-Regression
 
