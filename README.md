@@ -106,23 +106,14 @@ Clone the repository:
 Generated bash
 git clone http://github.com/Fusion831/Linear-Regression
 cd Linear-Regression
-IGNORE_WHEN_COPYING_START
-content_copy
-download
-Use code with caution.
-Bash
-IGNORE_WHEN_COPYING_END
+
+
 
 Run the sample script:
 
-Generated bash
 python sample_run.py
-IGNORE_WHEN_COPYING_START
-content_copy
-download
-Use code with caution.
-Bash
-IGNORE_WHEN_COPYING_END
+
+
 
 This script will:
 
@@ -134,4 +125,3 @@ Print the learned parameters (theta) from both methods.
 
 Display plots showing the data, regression lines, and cost history (these plots can also be saved by the script).
 
-Generated code
