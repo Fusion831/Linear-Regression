@@ -47,37 +47,57 @@ class Linear_Regression:
     -Stochastic Gradient Descent
     """
     
-    def __init__(self):
+    def __init__(self,lambda_val=0.0):
         """
         Initializing the Linear Regression Model
+        Args:
+            lambda_val(float): Sets the strengths for the regularization
+                                Default Value is 0, if no value is passed.
         -theta -> vector of parameters
         -cost_hist -> storing cost history for each iteration, used for various gradient descent algorithms
         """
         self.theta=None 
         self.cost_hist=[]
+        self.lambda_val=lambda_val
         
     
     def fit_normal_equation(self, X_b, y):
         """
-        Fits the model using the Normal Equation.
-        theta = (X_b.T @ X_b)^(-1) @ X_b.T @ y
-        Stores the result in self.theta and the final cost in self.cost_history.
-
-        Args:
-            X_b (np.ndarray): Design matrix.
-            y (np.ndarray): Target values.
+        Fits the model using the Normal Equation, with L2 regularization if lambda_val > 0.
+        theta = (X_b.T @ X_b + lambda * I')^(-1) @ X_b.T @ y
+        where I' is an identity matrix with its first element (0,0) set to 0.
         """
         try:
-            self.theta = np.linalg.inv(X_b.T @ X_b) @ X_b.T @ y
-            self.cost_history = [self.calculate_mse_cost(X_b, y, self.theta)]
+            XTX = X_b.T @ X_b
+            if self.lambda_val > 0:
+                n_params = XTX.shape[0] # Number of parameters including bias(number of columns in X_b)
+                
+                # Identity matrix for regularization, with 0 for the bias term
+                identity_matrix_prime = np.eye(n_params)
+                identity_matrix_prime[0, 0] = 0 
+                
+                regularization_term = self.lambda_val * identity_matrix_prime
+                
+                self.theta = np.linalg.inv(XTX + regularization_term) @ X_b.T @ y
+            else:
+                # Original Normal Equation (no regularization)
+                self.theta = np.linalg.inv(XTX) @ X_b.T @ y
+            
+            
+            if self.theta is not None:
+                 self.cost_history = [self.calculate_mse_cost(X_b, y, self.theta)]
+            else:
+                 self.cost_history = []
+
         except np.linalg.LinAlgError:
             self.theta = None
             self.cost_history = []
-            print("Error: Normal Equation failed. The matrix (X_b.T @ X_b) is singular and not invertible.")
+            print("Error: Normal Equation failed. Matrix (X_b.T @ X_b + lambda*I') might be singular or other linalg issue.")
     
     def calculate_mse_cost(self,X_b,y,theta):
         """
         Calculates the Mean Squared Error (MSE) cost.
+        Calculates MSE using ride regression, if lambda_val > 0.
          Args:
             X_b (np.ndarray): Design matrix (features + intercept column, x0=1).
             y (np.ndarray): Target values.
@@ -90,7 +110,13 @@ class Linear_Regression:
         if m == 0: return 0
         predictions= X_b@theta
         cost = (1 / (2 * m)) * np.sum(np.square(predictions - y))
-        return cost
+        
+        if self.lambda_val > 0:
+            l2_penalty= (self.lambda_val/2*m)*np.sum(np.square(theta[1:])) #Bias term is not regularized.
+            total_cost= cost+l2_penalty
+            return total_cost
+        else:
+            return cost
     
     
     def _gradient(self, X_b, y, theta):
@@ -113,6 +139,14 @@ class Linear_Regression:
         predictions = X_b @ theta
         errors = predictions - y
         gradient = (1 / m) * (X_b.T @ errors)
+        
+        if self.lambda_val > 0:
+            l2_grad=(self.lambda_val/2*m)*theta
+            l2_grad[0]=0
+            gradient= gradient + l2_grad
+            
+        
+        
         return gradient
     
     
